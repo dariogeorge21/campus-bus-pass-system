@@ -1,8 +1,23 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
+import { checkBookingStatus } from '@/lib/middleware';
 
 export async function POST(request: Request) {
   try {
+    const supabaseAdmin = getSupabaseAdmin();
+    
+    // CRITICAL SECURITY CHECK: Verify booking is enabled before processing any booking
+    try {
+      await checkBookingStatus(supabaseAdmin);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Booking status check failed';
+      console.error('Booking status check failed:', errorMessage);
+      return NextResponse.json({ 
+        error: errorMessage,
+        details: 'Please try again later when booking is enabled'
+      }, { status: 403 });
+    }
+
     const body = await request.json();
     const { 
       studentName, 
@@ -30,7 +45,6 @@ export async function POST(request: Request) {
       }
     });
 
-    const supabaseAdmin = getSupabaseAdmin();
     const { data, error } = await supabaseAdmin
       .from('bookings')
       .insert({

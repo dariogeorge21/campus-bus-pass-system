@@ -163,3 +163,28 @@ export function clearAuthCookie(response: NextResponse): void {
     path: '/'
   });
 }
+
+/**
+ * Utility function to check if booking is enabled
+ * This is a critical security function that should be called before any booking operations
+ */
+export async function checkBookingStatus(supabaseAdmin: any) {
+  const { data: adminSettings, error: settingsError } = await supabaseAdmin
+    .from('admin_settings')
+    .select('booking_enabled')
+    .single();
+
+  if (settingsError) {
+    console.error('Error fetching admin settings:', settingsError);
+    throw new Error('Unable to verify booking status - System configuration error');
+  }
+
+  const bookingEnabled = adminSettings?.booking_enabled ?? false;
+  
+  if (!bookingEnabled) {
+    console.log('Booking operation rejected - booking is disabled');
+    throw new Error('Booking is currently disabled - Please try again later when booking is enabled');
+  }
+
+  return true;
+}

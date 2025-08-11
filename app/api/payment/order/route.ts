@@ -1,7 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getSupabaseAdmin } from '@/lib/supabase-admin';
+import { checkBookingStatus } from '@/lib/middleware';
 
 export async function POST(request: NextRequest) {
   try {
+    // CRITICAL SECURITY CHECK: Verify booking is enabled before allowing payment orders
+    const supabaseAdmin = getSupabaseAdmin();
+    try {
+      await checkBookingStatus(supabaseAdmin);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Booking status check failed';
+      console.error('Payment order - booking status check failed:', errorMessage);
+      return NextResponse.json({ 
+        error: errorMessage,
+        details: 'Please try again later when booking is enabled'
+      }, { status: 403 });
+    }
+
     const body = await request.json();
     const { amount, currency = 'INR', receipt } = body as {
       amount: number; // in paise
