@@ -68,6 +68,7 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
+          className="space-y-6"
         >
           <Card className="w-full max-w-md shadow-2xl border-0 bg-white/80 backdrop-blur-sm">
             <CardContent className="p-8 text-center">
@@ -87,6 +88,32 @@ export default function HomePage() {
               </Button>
             </CardContent>
           </Card>
+
+          {/* My Bookings Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+          >
+            <Card className="w-full max-w-md shadow-lg border-0 bg-white/60 backdrop-blur-sm">
+              <CardContent className="p-6 text-center">
+                <h3 className="text-lg font-semibold text-gray-700 mb-3">
+                  Already have a booking?
+                </h3>
+                <p className="text-gray-600 mb-4 text-sm">
+                  Check your booking status and details
+                </p>
+                <Button
+                  onClick={() => router.push('/my-bookings')}
+                  variant="outline"
+                  size="lg"
+                  className="w-full border-2 border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300 font-semibold py-3 rounded-lg transition-all duration-300"
+                >
+                  My Bookings
+                </Button>
+              </CardContent>
+            </Card>
+          </motion.div>
         </motion.div>
 
         <Dialog open={showModal} onOpenChange={setShowModal}>
