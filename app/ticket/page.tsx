@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { PageTransition } from '@/components/ui/page-transition';
 import { useBooking } from '@/contexts/BookingContext';
-import { Ticket, Printer, Plus, Calendar, MapPin, User, CreditCard, Bus } from 'lucide-react';
+import { Ticket, Printer, Plus, Calendar, MapPin, User, CreditCard, Bus, Home as HomeIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
 
@@ -223,6 +223,22 @@ export default function TicketPage() {
             >
               <Plus className="w-4 h-4 mr-2" />
               Book Another Ticket
+            </Button>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="mt-4 print:hidden"
+          >
+            <Button
+              onClick={() => router.push('/')}
+              variant="secondary"
+              className="w-full bg-white border border-blue-600 rounded text-gray-800 hover:bg-gray-200"
+            >
+              <HomeIcon className="w-4 h-4 mr-2" />
+              Home
             </Button>
           </motion.div>
         </div>

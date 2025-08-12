@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { PageTransition } from '@/components/ui/page-transition';
 import { useBooking } from '@/contexts/BookingContext';
 import { motion } from 'framer-motion';
-import { User } from 'lucide-react';
+import { User, Home as HomeIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
 const formSchema = z.object({
@@ -183,6 +183,23 @@ export default function DetailsPage() {
               </Form>
             </CardContent>
           </Card>
+          
+          {/* Home button below the card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="mt-4"
+          >
+            <Button
+              onClick={() => router.push('/')}
+              variant="secondary"
+              className="w-full bg-white border border-blue-600 rounded text-gray-800 hover:bg-gray-200"
+            >
+              <HomeIcon className="w-4 h-4 mr-2" />
+              Home
+            </Button>
+          </motion.div>
         </motion.div>
       </div>
     </PageTransition>
