@@ -18,6 +18,7 @@ declare global {
 
 export default function PaymentPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const [processingMethod, setProcessingMethod] = useState<'online' | 'upfront' | null>(null);
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -64,6 +65,7 @@ export default function PaymentPage() {
     }
 
     setIsLoading(true);
+    setProcessingMethod('online');
     setError(null);
 
     try {
@@ -163,6 +165,7 @@ export default function PaymentPage() {
       setError(errorMessage);
       toast.error(errorMessage);
       setIsLoading(false);
+      setProcessingMethod(null);
     }
   };
 
@@ -214,6 +217,7 @@ export default function PaymentPage() {
       await handleRazorpayPayment();
     } else {
       setIsLoading(true);
+      setProcessingMethod('upfront');
       setError(null);
       try {
         // For upfront payments, explicitly pass null values for Razorpay fields
@@ -230,6 +234,7 @@ export default function PaymentPage() {
         toast.error(errorMessage);
       } finally {
         setIsLoading(false);
+        setProcessingMethod(null);
       }
     }
   };
@@ -312,14 +317,14 @@ export default function PaymentPage() {
             >
               <Card
                 className={`cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:bg-gradient-to-r hover:from-blue-50 hover:to-green-50 ${
-                  isLoading ? 'opacity-50 cursor-not-allowed' : ''
-                }`}
+                  isLoading ? 'opacity-75' : ''
+                } ${processingMethod === 'online' ? 'border-blue-500 shadow-md' : ''}`}
                 onClick={() => !isLoading && handlePaymentMethod('online')}
               >
                 <CardContent className="p-6 text-center">
                   <CreditCard className="w-12 h-12 text-blue-600 mx-auto mb-4" />
                   <h3 className="text-xl font-bold text-gray-800 mb-2">
-                    {isLoading ? 'Processing...' : 'Online Payment'}
+                    {processingMethod === 'online' ? 'Processing...' : 'Online Payment'}
                   </h3>
                   <p className="text-gray-600 mb-4">
                     Pay securely using Razorpay
@@ -335,17 +340,16 @@ export default function PaymentPage() {
               </Card>
 
               {/* Upfront Payment */}
-
               <Card
                 className={`cursor-pointer transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:bg-gradient-to-r hover:from-orange-50 hover:to-yellow-50 ${
-                  isLoading ? 'opacity-50 cursor-not-allowed' : ''
-                }`}
+                  isLoading ? 'opacity-75' : ''
+                } ${processingMethod === 'upfront' ? 'border-orange-500 shadow-md' : ''}`}
                 onClick={() => !isLoading && handlePaymentMethod('upfront')}
               >
                 <CardContent className="p-6 text-center">
                   <Wallet className="w-12 h-12 text-orange-600 mx-auto mb-4" />
                   <h3 className="text-xl font-bold text-gray-800 mb-2">
-                    {isLoading ? 'Processing...' : 'Pay at College'}
+                    {processingMethod === 'upfront' ? 'Processing...' : 'Pay at College'}
                   </h3>
                   <p className="text-gray-600">
                     Reserve seat and pay at college
