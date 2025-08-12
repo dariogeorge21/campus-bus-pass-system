@@ -8,6 +8,7 @@ import { PageTransition } from '@/components/ui/page-transition';
 import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 import { useBooking } from '@/contexts/BookingContext';
+import { ChevronLeft } from 'lucide-react';
 
 interface Params { params: { busRoute: string; destination: string } }
 
@@ -103,6 +104,16 @@ export default function BookingDetailsPage({ params }: Params) {
   return (
     <PageTransition>
       <div className="min-h-screen p-4">
+        {/* Back Button - above booking card */}
+        <div className="max-w-xl mx-auto">
+          <button
+            onClick={() => window.history.back()}
+            className="flex items-center text-blue-600 hover:text-blue-800 transition-colors mb-6 mt-2 sm:mb-8 sm:mt-4"
+          >
+            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+            <span className="text-sm sm:text-base font-medium ml-1">Back</span>
+          </button>
+        </div>
         <div className="max-w-xl mx-auto">
           <Card>
             <CardContent className="p-6 space-y-6">

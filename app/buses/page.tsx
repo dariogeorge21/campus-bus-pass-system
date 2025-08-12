@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { PageTransition } from '@/components/ui/page-transition';
-import { Bus as BusIcon, Users, Activity, User } from 'lucide-react';
+import { Bus as BusIcon, Users, Activity, User, ChevronLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase';
@@ -72,6 +72,19 @@ export default function BusesPage() {
   return (
     <PageTransition direction="right">
       <div className="min-h-screen p-4">
+        {/* Back Button - now outside the main container and spaced from top */}
+        <div className="max-w-6xl mx-auto">
+          <motion.button
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={() => router.push('/details')}
+            className="flex items-center text-blue-600 hover:text-blue-800 transition-colors mb-6 mt-2 sm:mb-8 sm:mt-4"
+          >
+            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+            <span className="text-sm sm:text-base font-medium ml-1">Back</span>
+          </motion.button>
+        </div>
         <div className="max-w-6xl mx-auto">
           {/* Student Info Display */}
           <div className="mb-6 bg-blue-50 p-4 rounded-lg border border-blue-200">

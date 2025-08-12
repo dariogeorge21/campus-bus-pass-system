@@ -6,7 +6,7 @@ import { supabase } from '@/lib/supabase';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { PageTransition } from '@/components/ui/page-transition';
-import { MapPin, ArrowRight, User } from 'lucide-react';
+import { MapPin, ArrowRight, User, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useBooking } from '@/contexts/BookingContext';
 
@@ -74,6 +74,16 @@ export default function DestinationsPage({ params }: Params) {
   return (
     <PageTransition>
       <div className="min-h-screen p-4">
+        {/* Back Button - above student info card */}
+        <div className="max-w-4xl mx-auto">
+          <button
+            onClick={() => router.push('/buses')}
+            className="flex items-center text-blue-600 hover:text-blue-800 transition-colors mb-6 mt-2 sm:mb-8 sm:mt-4"
+          >
+            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+            <span className="text-sm sm:text-base font-medium ml-1">Back</span>
+          </button>
+        </div>
         <div className="max-w-4xl mx-auto">
           {/* Student Info Display */}
           <div className="mb-6 bg-blue-50 p-4 rounded-lg border border-blue-200">
@@ -121,4 +131,4 @@ export default function DestinationsPage({ params }: Params) {
       </div>
     </PageTransition>
   );
-} 
+}
