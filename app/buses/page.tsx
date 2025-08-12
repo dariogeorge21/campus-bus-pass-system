@@ -121,13 +121,37 @@ export default function BusesPage() {
                 >
                   <CardContent className="p-6 relative">
                     <div className="absolute top-2 right-2 flex gap-2">
-                      <Badge
-                        variant={(bus.available_seats ?? 0) > 10 ? 'default' : (bus.available_seats ?? 0) > 0 ? 'secondary' : 'destructive'}
-                        className="text-xs"
+                      <motion.div
+                        initial={{ width: "auto" }}
+                        animate={{ 
+                          width: "auto",
+                          transition: { duration: 3 }
+                        }}
+                        className="relative"
                       >
-                        <Users className="w-3 h-3 mr-1" />
-                        {bus.available_seats ?? 0}
-                      </Badge>
+                        <Badge
+                          variant={(bus.available_seats ?? 0) > 10 ? 'default' : (bus.available_seats ?? 0) > 0 ? 'secondary' : 'destructive'}
+                          className="text-xs group transition-all duration-300"
+                        >
+                          <Users className="w-3 h-3 mr-1" />
+                          <motion.span
+                            initial={{ width: "auto" }}
+                            animate={{ 
+                              width: "auto",
+                              transition: { duration: 3 }
+                            }}
+                            className="flex items-center"
+                          >
+                            <span className="hidden sm:inline-block opacity-0 max-w-0 group-hover:max-w-xs group-hover:opacity-100 transition-all duration-300 overflow-hidden whitespace-nowrap">
+                              Available Seats:&nbsp;
+                            </span>
+                            <span className="sm:hidden inline-block whitespace-nowrap">
+                              Available Seats:&nbsp;
+                            </span>
+                            {bus.available_seats ?? 0}
+                          </motion.span>
+                        </Badge>
+                      </motion.div>
                       <Badge variant={bus.is_active ? 'default' : 'secondary'} className="text-xs">
                         <Activity className="w-3 h-3 mr-1" />
                         {bus.is_active ? 'Active' : 'Inactive'}
