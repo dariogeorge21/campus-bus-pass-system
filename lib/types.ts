@@ -17,6 +17,9 @@ export interface Booking {
   destination: string;
   paymentStatus: boolean;
   timestamp: string;
+  goDate?: string | null;
+  returnDate?: string | null;
+  fare?: number | null;
 }
 
 export interface AdminSettings {

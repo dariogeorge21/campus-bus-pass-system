@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
         .select('bus_route');
 
       const routeStats: { [key: string]: number } = {};
-      allBookings?.forEach(booking => {
+      allBookings?.forEach((booking: { bus_route: string }) => {
         routeStats[booking.bus_route] = (routeStats[booking.bus_route] || 0) + 1;
       });
 
@@ -48,26 +48,33 @@ export async function GET(request: NextRequest) {
 
       // Group by date
       const dailyStats: { [key: string]: number } = {};
-      dailyBookingsData?.forEach(booking => {
+      dailyBookingsData?.forEach((booking: { created_at: string }) => {
         const date = new Date(booking.created_at).toISOString().split('T')[0];
         dailyStats[date] = (dailyStats[date] || 0) + 1;
       });
 
-      // Get total revenue (assuming fare is stored somewhere or calculated)
-      const { data: bookingsWithDestinations } = await supabaseAdmin
+      // Get total revenue from actual fare data
+      const { data: paidBookingsWithFare } = await supabaseAdmin
         .from('bookings')
-        .select('bus_route, destination')
-        .eq('payment_status', true);
+        .select('fare')
+        .eq('payment_status', true)
+        .not('fare', 'is', null);
 
-      // For now, we'll use a simple calculation
-      // In a real app, you'd join with route_stops to get actual fares
+      // Calculate actual revenue from stored fare data
+      const actualRevenue = paidBookingsWithFare?.reduce((total: number, booking: { fare: number }) => {
+        return total + (booking.fare || 0);
+      }, 0) || 0;
+
+      // Fallback to estimated revenue if no fare data is available
       const estimatedRevenue = (paidBookings || 0) * 50; // Average fare estimate
+      const totalRevenue = actualRevenue > 0 ? actualRevenue : estimatedRevenue;
 
       return createApiResponse({
         totalBookings: totalBookings || 0,
         paidBookings: paidBookings || 0,
         pendingBookings: (totalBookings || 0) - (paidBookings || 0),
         recentBookings: recentBookings || 0,
+        totalRevenue,
         estimatedRevenue,
         routeStats: Object.entries(routeStats).map(([route, count]) => ({ route, count })),
         dailyStats: Object.entries(dailyStats).map(([date, count]) => ({ date, count }))

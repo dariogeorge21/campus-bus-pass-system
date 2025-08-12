@@ -31,12 +31,46 @@ export async function POST(request: Request) {
       razorpay_signature
     } = body;
 
+    // Fetch current admin settings to get travel dates
+    const { data: adminSettings, error: adminError } = await supabaseAdmin
+      .from('admin_settings')
+      .select('go_date, return_date')
+      .single();
+
+    if (adminError) {
+      console.error('Error fetching admin settings:', adminError);
+      return NextResponse.json({ 
+        error: 'Failed to fetch travel dates',
+        details: 'Unable to retrieve current travel dates'
+      }, { status: 500 });
+    }
+
+    // Fetch fare from route_stops table based on route and destination
+    const { data: routeStop, error: fareError } = await supabaseAdmin
+      .from('route_stops')
+      .select('fare')
+      .eq('route_code', busRoute)
+      .eq('stop_name', destination)
+      .eq('is_active', true)
+      .single();
+
+    if (fareError || !routeStop) {
+      console.error('Error fetching fare:', fareError);
+      return NextResponse.json({ 
+        error: 'Failed to fetch fare information',
+        details: `No fare found for route ${busRoute} and destination ${destination}`
+      }, { status: 400 });
+    }
+
     console.log('Creating booking with data:', {
       studentName,
       admissionNumber,
       busRoute,
       destination,
       paymentStatus,
+      goDate: adminSettings.go_date,
+      returnDate: adminSettings.return_date,
+      fare: routeStop.fare,
       hasRazorpayData: !!(razorpay_payment_id || razorpay_order_id || razorpay_signature),
       razorpayFields: {
         payment_id: razorpay_payment_id ? 'present' : 'null',
@@ -55,6 +89,11 @@ export async function POST(request: Request) {
         destination: destination,
         payment_status: paymentStatus ?? false,
         created_at: timestamp,
+        // Travel dates from admin settings
+        go_date: adminSettings.go_date,
+        return_date: adminSettings.return_date,
+        // Fare from route_stops table
+        fare: routeStop.fare,
         // Razorpay fields - can be null for upfront payments
         razorpay_payment_id: razorpay_payment_id || null,
         razorpay_order_id: razorpay_order_id || null,
