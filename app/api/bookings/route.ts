@@ -62,6 +62,22 @@ export async function POST(request: Request) {
       }, { status: 400 });
     }
 
+    // Fetch bus name from buses table based on route code
+    const { data: busData, error: busError } = await supabaseAdmin
+      .from('buses')
+      .select('name')
+      .eq('route_code', busRoute)
+      .eq('is_active', true)
+      .single();
+
+    if (busError || !busData) {
+      console.error('Error fetching bus name:', busError);
+      return NextResponse.json({ 
+        error: 'Failed to fetch bus information',
+        details: `No bus found for route code ${busRoute}`
+      }, { status: 400 });
+    }
+
     console.log('Creating booking with data:', {
       studentName,
       admissionNumber,
@@ -71,6 +87,7 @@ export async function POST(request: Request) {
       goDate: adminSettings.go_date,
       returnDate: adminSettings.return_date,
       fare: routeStop.fare,
+      busName: busData.name,
       hasRazorpayData: !!(razorpay_payment_id || razorpay_order_id || razorpay_signature),
       razorpayFields: {
         payment_id: razorpay_payment_id ? 'present' : 'null',
@@ -94,6 +111,8 @@ export async function POST(request: Request) {
         return_date: adminSettings.return_date,
         // Fare from route_stops table
         fare: routeStop.fare,
+        // Bus name from buses table
+        bus_name: busData.name,
         // Razorpay fields - can be null for upfront payments
         razorpay_payment_id: razorpay_payment_id || null,
         razorpay_order_id: razorpay_order_id || null,

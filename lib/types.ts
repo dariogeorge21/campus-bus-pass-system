@@ -20,6 +20,7 @@ export interface Booking {
   goDate?: string | null;
   returnDate?: string | null;
   fare?: number | null;
+  busName?: string | null;
 }
 
 export interface AdminSettings {

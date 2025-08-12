@@ -153,6 +153,10 @@ export type Database = {
           bus_route: string;
           destination: string;
           payment_status: boolean;
+          go_date: string | null;
+          return_date: string | null;
+          fare: number | null;
+          bus_name: string | null;
           razorpay_payment_id: string | null;
           razorpay_order_id: string | null;
           razorpay_signature: string | null;
@@ -164,6 +168,10 @@ export type Database = {
           bus_route: string;
           destination: string;
           payment_status?: boolean;
+          go_date?: string | null;
+          return_date?: string | null;
+          fare?: number | null;
+          bus_name?: string | null;
           razorpay_payment_id?: string | null;
           razorpay_order_id?: string | null;
           razorpay_signature?: string | null;
@@ -175,6 +183,10 @@ export type Database = {
           bus_route?: string;
           destination?: string;
           payment_status?: boolean;
+          go_date?: string | null;
+          return_date?: string | null;
+          fare?: number | null;
+          bus_name?: string | null;
           razorpay_payment_id?: string | null;
           razorpay_order_id?: string | null;
           razorpay_signature?: string | null;
