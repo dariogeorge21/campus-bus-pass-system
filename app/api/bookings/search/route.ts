@@ -75,7 +75,7 @@ export async function GET(request: NextRequest) {
     // Query bookings with proper error handling
     const { data: bookings, error } = await supabaseAdmin
       .from('bookings')
-      .select('*')
+      .select('admission_number, student_name, bus_name, destination, go_date, return_date, fare, payment_status, created_at')
       .eq('admission_number', sanitizedAdmissionNumber)
       .order('created_at', { ascending: false });
 
@@ -96,4 +96,4 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     return handleApiError(error, 'Failed to search bookings');
   }
-} 
+}

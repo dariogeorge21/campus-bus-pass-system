@@ -17,8 +17,8 @@ interface Booking {
   id: number;
   admission_number: string;
   student_name: string;
-  bus_route: string;
   destination: string;
+  bus_name?: string;
   go_date: string;
   return_date: string;
   fare: number;
@@ -101,7 +101,7 @@ export default function MyBookingsPage() {
       </Badge>
     ) : (
       <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">
-        Pending
+        Not Paid
       </Badge>
     );
   };
@@ -179,7 +179,7 @@ export default function MyBookingsPage() {
                     <Input
                       id="admissionNumber"
                       type="text"
-                      placeholder="e.g., 22CS001"
+                      placeholder="e.g., 24CS094"
                       value={admissionNumber}
                       onChange={(e) => setAdmissionNumber(e.target.value.toUpperCase())}
                       maxLength={7}
@@ -187,7 +187,7 @@ export default function MyBookingsPage() {
                       required
                     />
                     <p className="text-xs text-gray-500 mt-1">
-                      Format: XXAA000 (2 digits, 2 letters, 3 digits)
+                      Format: XXAA000 (Year - Department - Registration Number)
                     </p>
                   </div>
                   <Button
@@ -260,11 +260,6 @@ export default function MyBookingsPage() {
                         <CardContent className="p-4">
                           <div className="space-y-3">
                             <div className="flex items-center gap-2">
-                              <Bus className="w-4 h-4 text-blue-600" />
-                              <span className="font-medium">Route:</span>
-                              <span>{booking.bus_route}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
                               <MapPin className="w-4 h-4 text-green-600" />
                               <span className="font-medium">Destination:</span>
                               <span>{booking.destination}</span>
@@ -287,6 +282,11 @@ export default function MyBookingsPage() {
                             <div className="flex items-center gap-2">
                               <span className="font-medium">Booked on:</span>
                               <span>{formatDate(booking.created_at)}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Bus className="w-4 h-4 text-blue-600" />
+                              <span className="font-medium">Bus Name:</span>
+                              <span>{booking.bus_name}</span>
                             </div>
                           </div>
                         </CardContent>
@@ -333,7 +333,7 @@ export default function MyBookingsPage() {
                           <TableHeader>
                             <TableRow>
                               <TableHead>Student</TableHead>
-                              <TableHead>Route</TableHead>
+                              <TableHead>Bus Name</TableHead>
                               <TableHead>Destination</TableHead>
                               <TableHead>Go Date</TableHead>
                               <TableHead>Return Date</TableHead>
@@ -354,7 +354,7 @@ export default function MyBookingsPage() {
                                 <TableCell>
                                   <div className="flex items-center gap-2">
                                     <Bus className="w-4 h-4 text-blue-600" />
-                                    {booking.bus_route}
+                                    {booking.bus_name}
                                   </div>
                                 </TableCell>
                                 <TableCell>
@@ -443,4 +443,4 @@ export default function MyBookingsPage() {
       </div>
     </PageTransition>
   );
-} 
+}
