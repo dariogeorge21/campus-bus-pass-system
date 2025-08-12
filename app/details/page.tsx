@@ -18,9 +18,9 @@ import { toast } from 'sonner';
 const formSchema = z.object({
   studentName: z.string()
     .min(2, 'Name must be at least 2 characters')
-    .regex(/^[a-zA-Z\s]+$/, 'Name can only contain letters and spaces'),
+    .regex(/^[a-zA-Z]+(\s[a-zA-Z]+){1,2}$/, 'Name must contain 2 to 3 words, separated by spaces'),
   admissionNumber: z.string()
-    .regex(/^[A-Z0-9]{7}$/, 'Admission number must be exactly 7 uppercase letters or numbers (e.g., 24CS094)'),
+    .regex(/^\d{2}[A-Za-z]{2}\d{3}$/, 'Admission number must follow the format: (Year - Department - Registration Number)'),
 });
 
 type FormData = z.infer<typeof formSchema>;
