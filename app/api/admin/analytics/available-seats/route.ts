@@ -19,7 +19,7 @@ export async function GET() {
     }
 
     // Sum up all available seats
-    const totalAvailableSeats = buses?.reduce((total, bus) => {
+    const totalAvailableSeats = buses?.reduce((total:any, bus:any) => {
       return total + (bus.available_seats || 0);
     }, 0) || 0;
 
