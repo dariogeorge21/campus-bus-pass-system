@@ -148,11 +148,14 @@ export default function BookingDetailsPage({ params }: Params) {
                 </div>
               </div>
               
-              <Link href="/payment">
-                <Button className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700">
-                  Confirm and Make Payment
-                </Button>
-              </Link>
+              {/* Add spacing between sections */}
+              <div className="mt-6">
+                <Link href="/payment">
+                  <Button className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700">
+                    Confirm and Make Payment
+                  </Button>
+                </Link>
+              </div>
               
               <p className="text-xs text-gray-500 text-center">
                 By confirming, you agree to the terms and conditions for bus pass booking.
