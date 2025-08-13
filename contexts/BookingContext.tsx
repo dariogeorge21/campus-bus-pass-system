@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 
 interface BookingData {
   studentName: string;
@@ -33,13 +33,13 @@ const BookingContext = createContext<BookingContextType | undefined>(undefined);
 export function BookingProvider({ children }: { children: ReactNode }) {
   const [bookingData, setBookingData] = useState<BookingData>(initialBookingData);
 
-  const updateBookingData = (data: Partial<BookingData>) => {
+  const updateBookingData = useCallback((data: Partial<BookingData>) => {
     setBookingData(prev => ({ ...prev, ...data }));
-  };
+  }, []);
 
-  const resetBookingData = () => {
+  const resetBookingData = useCallback(() => {
     setBookingData(initialBookingData);
-  };
+  }, []);
 
   return (
     <BookingContext.Provider value={{ bookingData, updateBookingData, resetBookingData }}>
