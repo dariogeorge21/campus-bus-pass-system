@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
@@ -30,17 +30,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
   const isAuthenticated = !!user;
 
-  // Validate session on mount and periodically
-  useEffect(() => {
-    validateSession();
-    
-    // Set up periodic session validation (every 5 minutes)
-    const interval = setInterval(validateSession, 5 * 60 * 1000);
-    
-    return () => clearInterval(interval);
-  }, []);
-
-  const validateSession = async (): Promise<boolean> => {
+  const validateSession = useCallback(async (): Promise<boolean> => {
     try {
       const response = await fetch('/api/admin/validate', {
         credentials: 'include'
@@ -67,17 +57,27 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       setIsLoading(false);
       return false;
     }
-  };
+  }, []);
 
-  const login = (userData: AdminUser) => {
+  // Validate session on mount and periodically
+  useEffect(() => {
+    validateSession();
+
+    // Set up periodic session validation (every 5 minutes)
+    const interval = setInterval(validateSession, 5 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, [validateSession]);
+
+  const login = useCallback((userData: AdminUser) => {
     setUser(userData);
     localStorage.setItem('admin_user', JSON.stringify(userData));
-  };
+  }, []);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     try {
       setIsLoading(true);
-      
+
       // Call logout API
       await fetch('/api/admin/logout', {
         method: 'POST',
@@ -87,7 +87,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       // Clear user data
       setUser(null);
       localStorage.removeItem('admin_user');
-      
+
       toast.success('Logged out successfully');
       router.push('/admin');
     } catch (error) {
@@ -96,7 +96,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [router]);
 
   const value: AdminContextType = {
     user,

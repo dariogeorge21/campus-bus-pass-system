@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { PageTransition } from '@/components/ui/page-transition';
+import { useAdmin } from '@/contexts/AdminContext';
 import { Shield, Eye, EyeOff, Home } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
@@ -25,6 +26,7 @@ export default function AdminLoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const { login, isAuthenticated, isLoading: authLoading } = useAdmin();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -33,6 +35,13 @@ export default function AdminLoginPage() {
       password: '',
     },
   });
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      router.replace('/admin/dashboard');
+    }
+  }, [isAuthenticated, authLoading, router]);
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
@@ -44,15 +53,19 @@ export default function AdminLoginPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
+        credentials: 'include', // Include cookies for session management
       });
 
       const result = await response.json();
 
       if (response.ok && result.success) {
         toast.success('Login successful');
-        // Store user data in localStorage for client-side access
-        localStorage.setItem('admin_user', JSON.stringify(result.data.user));
-        router.push('/admin/dashboard');
+
+        // Use the centralized login function to update auth state
+        login(result.data.user);
+
+        // Navigate to dashboard - the auth context will handle the state update
+        router.replace('/admin/dashboard');
       } else {
         toast.error(result.error || 'Invalid credentials');
       }
@@ -62,6 +75,20 @@ export default function AdminLoginPage() {
       setIsLoading(false);
     }
   };
+
+  // Show loading while checking authentication
+  if (authLoading) {
+    return (
+      <PageTransition>
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Checking authentication...</p>
+          </div>
+        </div>
+      </PageTransition>
+    );
+  }
 
   return (
     <PageTransition>
