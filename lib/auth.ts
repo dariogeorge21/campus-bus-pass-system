@@ -2,7 +2,11 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { supabaseAdmin } from './supabase';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production';
+// Use environment variable for JWT secret, with a strong fallback for development
+const JWT_SECRET = process.env.JWT_SECRET || 
+  (process.env.NODE_ENV === 'production' 
+    ? (() => { throw new Error('JWT_SECRET environment variable is required in production'); })() 
+    : 'dev_jwt_secret_' + Math.random().toString(36).substring(2));
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 export interface AdminUser {
