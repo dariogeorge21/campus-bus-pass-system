@@ -72,7 +72,7 @@ export async function GET(request: NextRequest) {
       }) || [];
 
       // Sort by booking count (highest first)
-      routes.sort((a, b) => b.totalBookings - a.totalBookings);
+      routes.sort((a: any, b: any) => b.totalBookings - a.totalBookings);
 
       const response: RoutesApiResponse = {
         success: true,

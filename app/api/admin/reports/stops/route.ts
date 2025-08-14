@@ -65,22 +65,22 @@ export async function GET(request: NextRequest) {
       }
 
       // Count bookings per stop
-      const stopCounts = stopBookings?.reduce((acc, booking) => {
+      const stopCounts = stopBookings?.reduce((acc: Record<string, number>, booking: any) => {
         const stop = booking.destination;
         acc[stop] = (acc[stop] || 0) + 1;
         return acc;
       }, {} as Record<string, number>) || {};
 
       // Transform to array and calculate percentages
-      const stops = Object.entries(stopCounts)
-        .map(([stopName, bookingCount]) => ({
-          stopName,
-          bookingCount,
-          percentageOfRoute: totalRouteBookings && totalRouteBookings > 0 
-            ? Math.round((bookingCount / totalRouteBookings) * 100) 
-            : 0
-        }))
-        .sort((a, b) => b.bookingCount - a.bookingCount); // Sort by booking count descending
+      const stops = (Object.entries(stopCounts) as [string, number][])
+              .map(([stopName, bookingCount]) => ({
+                stopName,
+                bookingCount,
+                percentageOfRoute: totalRouteBookings && totalRouteBookings > 0 
+                  ? Math.round((bookingCount / totalRouteBookings) * 100) 
+                  : 0
+              }))
+              .sort((a, b) => b.bookingCount - a.bookingCount); // Sort by booking count descending
 
       const response: StopsApiResponse = {
         success: true,

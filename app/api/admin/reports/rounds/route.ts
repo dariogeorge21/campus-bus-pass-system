@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
       }
 
       // Transform data to match interface
-      const rounds = roundsData?.map(round => ({
+      const rounds = roundsData?.map((round: any) => ({
         id: round.id,
         goDate: round.go_date,
         returnDate: round.return_date,

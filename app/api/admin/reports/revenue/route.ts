@@ -22,10 +22,10 @@ export async function GET(request: NextRequest) {
       }
 
       // Calculate total revenue
-      const totalRevenue = revenueData?.reduce((sum, route) => sum + Number(route.total_revenue), 0) || 0;
+      const totalRevenue = revenueData?.reduce((sum: number, route: any) => sum + Number(route.total_revenue), 0) || 0;
 
       // Transform data and calculate revenue per booking
-      const routes = revenueData?.map(route => ({
+      const routes = revenueData?.map((route: any) => ({
         busRoute: route.bus_route,
         busName: route.bus_name,
         totalRevenue: Number(route.total_revenue),
