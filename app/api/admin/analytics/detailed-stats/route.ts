@@ -50,10 +50,6 @@ export async function GET() {
         )
       },
       error: null
-    }, {
-      headers: {
-        'Cache-Control': 'public, max-age=30, stale-while-revalidate=15'
-      }
     });
 
   } catch (error) {
