@@ -37,6 +37,7 @@ interface NewBookingStats {
   currentBookings: number;
   paidBookings: number;
   unpaidBookings: number;
+  currentRevenue: number;
   availableSeats: number;
   totalCapacity: number;
   occupancyRate: string;
@@ -68,6 +69,7 @@ function AdminDashboard() {
     currentBookings: 0,
     paidBookings: 0,
     unpaidBookings: 0,
+    currentRevenue: 0,
     availableSeats: 0,
     totalCapacity: 0,
     occupancyRate: '0.0',
@@ -164,6 +166,7 @@ function AdminDashboard() {
           currentBookings: currentBookingsData.success ? currentBookingsData.data : 0,
           paidBookings: 0, // Not available from individual endpoints
           unpaidBookings: 0, // Not available from individual endpoints
+          currentRevenue: 0, // Not available from individual endpoints
           availableSeats: availableSeatsData.success ? availableSeatsData.data : 0,
           totalCapacity: 0, // Not available from individual endpoints
           occupancyRate: '0.0'
@@ -178,6 +181,7 @@ function AdminDashboard() {
         currentBookings: 0,
         paidBookings: 0,
         unpaidBookings: 0,
+        currentRevenue: 0,
         availableSeats: 0,
         totalCapacity: 0,
         occupancyRate: '0.0'
@@ -365,7 +369,7 @@ function AdminDashboard() {
                 </div>
 
                 {/* Enhanced Statistics */}
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6 pt-4 border-t border-gray-200">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6 pt-4 border-t border-gray-200">
                   <div className="text-center p-3 bg-emerald-50 rounded-lg">
                     <div className="text-xl font-bold text-emerald-600">{newBookingStats.paidBookings}</div>
                     <div className="text-sm text-gray-600">Paid Bookings</div>
@@ -373,6 +377,10 @@ function AdminDashboard() {
                   <div className="text-center p-3 bg-amber-50 rounded-lg">
                     <div className="text-xl font-bold text-amber-600">{newBookingStats.unpaidBookings}</div>
                     <div className="text-sm text-gray-600">Unpaid Bookings</div>
+                  </div>
+                  <div className="text-center p-3 bg-green-50 rounded-lg">
+                    <div className="text-xl font-bold text-green-600">₹{newBookingStats.currentRevenue}</div>
+                    <div className="text-sm text-gray-600">Current Revenue</div>
                   </div>
                   <div className="text-center p-3 bg-indigo-50 rounded-lg">
                     <div className="text-xl font-bold text-indigo-600">{newBookingStats.occupancyRate}%</div>

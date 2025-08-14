@@ -29,3 +29,15 @@ export interface AdminSettings {
   returnDate: string | null;
   busAvailability: { [busRoute: string]: number };
 }
+
+export interface NewBookingStats {
+  totalBuses: number;
+  totalBookings: number;
+  currentBookings: number;
+  paidBookings: number;
+  unpaidBookings: number;
+  currentRevenue: number;
+  availableSeats: number;
+  totalCapacity: number;
+  occupancyRate: string;
+}

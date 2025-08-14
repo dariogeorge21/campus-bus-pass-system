@@ -199,18 +199,30 @@ export type Database = {
           booking_enabled: boolean;
           go_date: string | null;
           return_date: string | null;
+          current_bookings: number | null;
+          paid_bookings: number | null;
+          unpaid_bookings: number | null;
+          current_revenue: number | null;
           updated_at: string;
         };
         Insert: {
           booking_enabled?: boolean;
           go_date?: string | null;
           return_date?: string | null;
+          current_bookings?: number | null;
+          paid_bookings?: number | null;
+          unpaid_bookings?: number | null;
+          current_revenue?: number | null;
           updated_at?: string;
         };
         Update: {
           booking_enabled?: boolean;
           go_date?: string | null;
           return_date?: string | null;
+          current_bookings?: number | null;
+          paid_bookings?: number | null;
+          unpaid_bookings?: number | null;
+          current_revenue?: number | null;
           updated_at?: string;
         };
       };
