@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { PageTransition } from '@/components/ui/page-transition';
 import { useAdmin, withAdminAuth } from '@/contexts/AdminContext';
-import { Settings, Bus, Calendar, Users, LogOut, Plus, Edit, Trash2, Route, MapPin, BookOpen, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
+import { Settings, Bus, Calendar, Users, LogOut, Plus, Edit, Trash2, Route, MapPin, BookOpen, ChevronLeft, ChevronRight, RotateCcw, BarChart3 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
@@ -312,7 +312,7 @@ function AdminDashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <Button
                     onClick={() => router.push('/admin/buses')}
                     variant="outline"
@@ -328,6 +328,14 @@ function AdminDashboard() {
                   >
                     <Route className="w-5 h-5" />
                     Route Management
+                  </Button>
+                  <Button
+                    onClick={() => router.push('/admin/reports')}
+                    variant="outline"
+                    className="flex items-center gap-2 h-12"
+                  >
+                    <BarChart3 className="w-5 h-5" />
+                    Reports Dashboard
                   </Button>
                 </div>
               </CardContent>
