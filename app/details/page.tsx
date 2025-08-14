@@ -43,7 +43,14 @@ export default function DetailsPage() {
   useEffect(() => {
     const checkBookingStatus = async () => {
       try {
-        const response = await fetch('/api/booking-status');
+        // Add cache-busting by using timestamp and no-cache options
+        const timestamp = Date.now();
+        const response = await fetch(`/api/booking-status?t=${timestamp}`, {
+          cache: 'no-store',
+          headers: {
+            'Pragma': 'no-cache'
+          }
+        });
         const data = await response.json();
 
         if (!data.enabled) {
