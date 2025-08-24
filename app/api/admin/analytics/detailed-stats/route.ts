@@ -32,7 +32,7 @@ export async function GET() {
       };
     }
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       data: {
         totalBuses: stats.total_buses,
@@ -52,12 +52,22 @@ export async function GET() {
       error: null
     });
 
+    // Set no-cache headers
+    response.headers.set('Cache-Control', 'no-store');
+
+    return response;
+
   } catch (error) {
     console.error('Unexpected error fetching detailed booking statistics:', error);
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: false,
       error: 'Internal server error',
       data: null
     }, { status: 500 });
+
+    // Set no-cache headers
+    response.headers.set('Cache-Control', 'no-store');
+
+    return response;
   }
 }
