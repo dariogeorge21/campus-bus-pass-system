@@ -9,6 +9,9 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Bus Pass Booking - St. Joseph\'s College of Engineering and Technology, Palai',
   description: 'Online bus pass booking system for students',
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({
