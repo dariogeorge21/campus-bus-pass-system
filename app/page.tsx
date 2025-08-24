@@ -53,7 +53,7 @@ export default function HomePage() {
             className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
           >
             <Settings className="w-4 h-4" />
-            Admin
+            <span className="hidden sm:inline">Admin</span>
           </Button>
         </div>
         <motion.div
